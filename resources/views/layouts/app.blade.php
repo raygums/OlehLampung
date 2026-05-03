@@ -47,6 +47,46 @@
                         <span class="absolute -top-0.5 -right-0.5 bg-amber text-navy text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center cart-count" id="cart-badge" style="display: none;">0</span>
                     </a>
 
+                    {{-- Profil & Logout --}}
+                    @auth
+                        <div class="relative group cursor-pointer">
+                            <div class="flex items-center gap-2 text-gray-300 hover:text-amber transition-colors p-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                <span class="hidden md:block text-sm font-medium">{{ explode(' ', Auth::user()->name)[0] }}</span>
+                            </div>
+
+                            {{-- Dropdown Menu --}}
+                            <div class="absolute right-0 mt-4 w-48 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 overflow-hidden border border-gray-100">
+                                @if(str_contains(Auth::user()->email, 'admin'))
+                                    <a href="{{ route('admin.dashboard') }}" class="block px-4 py-3 text-sm text-navy hover:bg-gray-50 border-b border-gray-100">
+                                        Masuk Panel Admin
+                                    </a>
+                                @else
+                                    <a href="{{ route('orders.index') }}" class="block px-4 py-3 text-sm text-navy hover:bg-gray-50 border-b border-gray-100">
+                                        Riwayat Pesanan
+                                    </a>
+                                @endif
+                                
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                        Keluar Akun
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @else
+                        {{-- Tombol Masuk untuk Desktop --}}
+                        <a href="{{ route('login') }}" class="hidden md:flex text-sm font-medium text-white hover:text-amber transition-colors border border-white/30 rounded-full px-4 py-1.5 ml-2 hover:border-amber items-center">
+                            Masuk
+                        </a>
+                        {{-- Tombol Masuk untuk Mobile (Ikon Orang) --}}
+                        <a href="{{ route('login') }}" class="md:hidden text-gray-300 hover:text-amber p-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        </a>
+                    @endauth
+
                     {{-- Mobile Menu Toggle --}}
                     <button class="md:hidden text-gray-300 hover:text-amber p-2" id="mobile-menu-btn">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
