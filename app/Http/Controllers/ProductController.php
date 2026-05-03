@@ -41,7 +41,7 @@ class ProductController extends Controller
         };
 
         $products = $query->paginate(9)->withQueryString();
-        $categories = Category::withCount('products')->orderBy('sort_order')->get();
+        $categories = Category::withCount('products')->whereIn('slug', ['kopi', 'makanan'])->orderBy('sort_order')->get();
 
         return view('products.index', compact('products', 'categories'));
     }
@@ -90,7 +90,7 @@ class ProductController extends Controller
         }
 
         $products = $query->paginate(9)->withQueryString();
-        $categories = Category::withCount('products')->orderBy('sort_order')->get();
+        $categories = Category::withCount('products')->whereIn('slug', ['kopi', 'makanan'])->orderBy('sort_order')->get();
 
         return view('products.index', [
             'products' => $products,
@@ -118,7 +118,7 @@ class ProductController extends Controller
             ->with('category')
             ->paginate(9);
 
-        $categories = Category::withCount('products')->orderBy('sort_order')->get();
+        $categories = Category::withCount('products')->whereIn('slug', ['kopi', 'makanan'])->orderBy('sort_order')->get();
 
         return view('products.index', [
             'products' => $products,
