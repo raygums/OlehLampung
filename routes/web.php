@@ -11,7 +11,12 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', function() {
+    return view('home', [
+        'categories' => \App\Models\Category::orderBy('sort_order')->take(3)->get(),
+        'featuredProducts' => \App\Models\Product::active()->featured()->with('category')->take(4)->get(),
+    ]);
+})->name('home');
 
 // Products
 Route::get('/produk', [ProductController::class, 'index'])->name('products.index');

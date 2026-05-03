@@ -79,7 +79,7 @@ class CheckoutController extends Controller
             'jne_reguler' => 18000,
             'jne_yes' => 35000,
             'jnt_express' => 15000,
-            'kurir_lokal' => 10000,
+            'kurir_lokal' => 1,
         ];
         $shippingCost = $shippingCosts[$request->shipping_method] ?? 18000;
         $total = $subtotal + $shippingCost;
@@ -154,16 +154,14 @@ class CheckoutController extends Controller
 
     private function getMidtransSnapToken(Order $order): ?string
     {
-        $serverKey = config('services.midtrans.server_key');
+        \Midtrans\Config::$serverKey = config('services.midtrans.serverKey');
+        \Midtrans\Config::$isProduction = config('services.midtrans.isProduction');
+        \Midtrans\Config::$isSanitized = config('services.midtrans.isSanitized');
+        \Midtrans\Config::$is3ds = config('services.midtrans.is3ds');
 
-        if (!$serverKey || $serverKey === 'your-server-key-here') {
+        if (!\Midtrans\Config::$serverKey || \Midtrans\Config::$serverKey === 'your-server-key-here') {
             return null;
         }
-
-        $isProduction = config('services.midtrans.is_production', false);
-        $baseUrl = $isProduction
-            ? 'https://app.midtrans.com/snap/v1/transactions'
-            : 'https://app.sandbox.midtrans.com/snap/v1/transactions';
 
         $params = [
             'transaction_details' => [
@@ -197,12 +195,8 @@ class CheckoutController extends Controller
         ];
 
         try {
-            $response = Http::withBasicAuth($serverKey, '')
-                ->post($baseUrl, $params);
-
-            if ($response->successful()) {
-                return $response->json('token');
-            }
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+            return $snapToken;
         } catch (\Exception $e) {
             // Log error but don't block order
             \Log::error('Midtrans token error: ' . $e->getMessage());
@@ -213,7 +207,7 @@ class CheckoutController extends Controller
 
     public function midtransCallback(Request $request)
     {
-        $serverKey = config('services.midtrans.server_key');
+        $serverKey = config('services.midtrans.serverKey');
         $hashed = hash('sha512', $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
 
         if ($hashed !== $request->signature_key) {

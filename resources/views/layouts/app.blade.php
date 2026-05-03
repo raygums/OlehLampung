@@ -82,12 +82,12 @@
 
     {{-- Footer --}}
     <footer class="bg-navy text-gray-400 mt-auto">
-        <div class="container-main py-12">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="container-main py-16">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
                 {{-- About --}}
                 <div>
-                    <h4 class="text-white font-heading font-semibold mb-4">Tentang Kami</h4>
-                    <ul class="space-y-2 text-sm">
+                    <h4 class="text-white font-heading font-semibold text-base mb-5">Tentang Kami</h4>
+                    <ul class="space-y-3 text-sm">
                         <li><a href="#" class="hover:text-amber transition-colors">Kisah Kami</a></li>
                         <li><a href="#" class="hover:text-amber transition-colors">Visi & Misi</a></li>
                         <li><a href="#" class="hover:text-amber transition-colors">Keberlangsutan</a></li>
@@ -95,8 +95,8 @@
                 </div>
                 {{-- Products --}}
                 <div>
-                    <h4 class="text-white font-heading font-semibold mb-4">Produk</h4>
-                    <ul class="space-y-2 text-sm">
+                    <h4 class="text-white font-heading font-semibold text-base mb-5">Produk</h4>
+                    <ul class="space-y-3 text-sm">
                         <li><a href="{{ route('products.category', 'kopi') }}" class="hover:text-amber transition-colors">Kopi</a></li>
                         <li><a href="{{ route('products.category', 'makanan') }}" class="hover:text-amber transition-colors">Makanan</a></li>
                         <li><a href="{{ route('products.category', 'kerajinan') }}" class="hover:text-amber transition-colors">Kerajinan</a></li>
@@ -104,8 +104,8 @@
                 </div>
                 {{-- Support --}}
                 <div>
-                    <h4 class="text-white font-heading font-semibold mb-4">Dukungan</h4>
-                    <ul class="space-y-2 text-sm">
+                    <h4 class="text-white font-heading font-semibold text-base mb-5">Dukungan</h4>
+                    <ul class="space-y-3 text-sm">
                         <li><a href="#" class="hover:text-amber transition-colors">Hubungi Kami</a></li>
                         <li><a href="#" class="hover:text-amber transition-colors">FAQ</a></li>
                         <li><a href="#" class="hover:text-amber transition-colors">Kebijakan Privasi</a></li>
@@ -113,8 +113,8 @@
                 </div>
                 {{-- Social --}}
                 <div>
-                    <h4 class="text-white font-heading font-semibold mb-4">Ikuti Kami</h4>
-                    <ul class="space-y-2 text-sm">
+                    <h4 class="text-white font-heading font-semibold text-base mb-5">Ikuti Kami</h4>
+                    <ul class="space-y-3 text-sm">
                         <li><a href="#" class="hover:text-amber transition-colors">Instagram</a></li>
                         <li><a href="#" class="hover:text-amber transition-colors">Facebook</a></li>
                         <li><a href="#" class="hover:text-amber transition-colors">Twitter</a></li>
@@ -123,7 +123,7 @@
             </div>
         </div>
         <div class="border-t border-navy-light">
-            <div class="container-main py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="container-main py-5 flex flex-col md:flex-row items-center justify-between gap-4">
                 <p class="text-sm">&copy; {{ date('Y') }} OlehLampung. Semua hak dilindungi.</p>
                 <div class="flex items-center gap-3">
                     <a href="#" class="w-8 h-8 rounded-full bg-navy-light flex items-center justify-center hover:bg-amber hover:text-navy transition-all">

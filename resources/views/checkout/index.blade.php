@@ -99,7 +99,7 @@
                         Metode Pengiriman
                     </h2>
                     <div class="space-y-3">
-                        @foreach([['jne_reguler','JNE Reguler','Estimasi 2–3 hari kerja',18000],['jne_yes','JNE YES – Yakin Esok Sampai','Estimasi 1 hari kerja',35000],['jnt_express','J&T Express','Estimasi 2–4 hari kerja',15000],['kurir_lokal','Kurir Lokal (Bandar Lampung)','Same day – khusus area Bandar Lampung',10000]] as $s)
+                        @foreach([['jne_reguler','JNE Reguler','Estimasi 2–3 hari kerja',18000],['jne_yes','JNE YES – Yakin Esok Sampai','Estimasi 1 hari kerja',35000],['jnt_express','J&T Express','Estimasi 2–4 hari kerja',15000],['kurir_lokal','Kurir Lokal (Bandar Lampung)','Same day – khusus area Bandar Lampung',1]] as $s)
                             <label class="flex items-center gap-4 p-4 rounded-lg border {{ old('shipping_method')==$s[0]?'border-amber bg-amber-50':'border-gray-200' }} cursor-pointer hover:border-amber transition-colors shipping-option">
                                 <input type="radio" name="shipping_method" value="{{ $s[0] }}" class="w-4 h-4 text-amber" {{ old('shipping_method')==$s[0]?'checked':'' }} {{ $loop->first && !old('shipping_method')?'checked':'' }} onchange="updateShipping({{ $s[3] }})">
                                 <div class="flex-1">

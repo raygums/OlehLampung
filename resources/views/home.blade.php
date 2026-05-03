@@ -5,7 +5,7 @@
 @section('content')
 {{-- Hero Section --}}
 <section class="bg-cream">
-    <div class="container-main py-16 md:py-20">
+    <div class="container-main py-20 md:py-28">
         <div class="grid md:grid-cols-2 gap-10 items-center">
             <div class="animate-fade-in-up">
                 <h1 class="font-heading text-4xl md:text-5xl font-extrabold text-navy leading-tight mb-4">
@@ -41,10 +41,10 @@
 </section>
 
 {{-- Kategori Unggulan --}}
-<section class="py-16">
+<section class="py-20">
     <div class="container-main">
         <h2 class="section-title">Kategori Unggulan</h2>
-        <p class="section-subtitle mb-10">Jelajahi koleksi terbaik dari Lampung</p>
+        <p class="section-subtitle mb-12">Jelajahi koleksi terbaik dari Lampung</p>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @foreach($categories as $category)
@@ -60,10 +60,10 @@
 </section>
 
 {{-- Produk Pilihan --}}
-<section class="py-16 bg-gray-50">
+<section class="py-20 bg-gray-50">
     <div class="container-main">
         <h2 class="section-title">Produk Pilihan</h2>
-        <p class="section-subtitle mb-10">Terbaru dan terpopuler dari koleksi kami</p>
+        <p class="section-subtitle mb-12">Terbaru dan terpopuler dari koleksi kami</p>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             @foreach($featuredProducts as $product)
@@ -77,12 +77,12 @@
                             @endif
                         </div>
                     </a>
-                    <div class="card-body">
-                        <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">{{ $product->category->name }}</p>
-                        <a href="{{ route('products.show', $product) }}" class="font-semibold text-navy text-sm hover:text-amber transition-colors line-clamp-2 mb-2">
+                    <div class="p-4">
+                        <p class="text-xs text-gray-400 uppercase tracking-wide mb-1.5">{{ $product->category->name }}</p>
+                        <a href="{{ route('products.show', $product) }}" class="font-semibold text-navy text-sm hover:text-amber transition-colors line-clamp-2 mb-2.5 block leading-snug">
                             {{ $product->name }}
                         </a>
-                        <div class="flex items-center gap-1 mb-2">
+                        <div class="flex items-center gap-1 mb-2.5">
                             <div class="stars">
                                 @for($i = 1; $i <= 5; $i++)
                                     @if($i <= floor($product->rating))
@@ -113,7 +113,7 @@
             @endforeach
         </div>
 
-        <div class="text-center mt-10">
+        <div class="text-center mt-12">
             <a href="{{ route('products.index') }}" class="btn btn-dark">
                 Lihat Semua Produk
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
