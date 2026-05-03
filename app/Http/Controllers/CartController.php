@@ -49,7 +49,8 @@ class CartController extends Controller
 
         session()->put('cart', $cart);
 
-        if ($request->ajax()) {
+        // KITA UBAH DI SINI
+        if ($request->wantsJson()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Produk ditambahkan ke keranjang!',
@@ -73,7 +74,8 @@ class CartController extends Controller
             session()->put('cart', $cart);
         }
 
-        if ($request->ajax()) {
+        // KITA UBAH DI SINI
+        if ($request->wantsJson()) {
             $product = Product::find($id);
             $subtotal = 0;
             foreach ($cart as $cid => $item) {
@@ -98,7 +100,8 @@ class CartController extends Controller
         unset($cart[$id]);
         session()->put('cart', $cart);
 
-        if (request()->ajax()) {
+        // KITA UBAH JUGA DI SINI (jangan lupa tambah $request di parameternya kalau mau pakai $request->wantsJson(), atau pakai fungsi global request())
+        if (request()->wantsJson()) {
             $subtotal = 0;
             foreach ($cart as $cid => $item) {
                 $p = Product::find($cid);
