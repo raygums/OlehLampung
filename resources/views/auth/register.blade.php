@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk Akun — OlehLampung</title>
+    <title>Daftar Akun — OlehLampung</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-navy min-h-screen flex items-center justify-center">
+<body class="bg-navy min-h-screen flex items-center justify-center py-10">
     <div class="w-full max-w-md mx-4">
         <div class="text-center mb-8">
             <h1 class="font-heading text-3xl font-bold text-white"><span class="text-amber">Oleh</span>Lampung <span class="text-amber text-sm">✦</span></h1>
-            <p class="text-gray-400 mt-2">Masuk ke akun Anda</p>
+            <p class="text-gray-400 mt-2">Buat akun untuk mulai belanja</p>
         </div>
 
         <div class="bg-white rounded-2xl p-8 shadow-2xl">
@@ -22,21 +22,29 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('register') }}">
                 @csrf
                 <div class="mb-4">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-input" value="{{ old('email') }}" required autofocus placeholder="nama@email.com">
+                    <label class="form-label">Nama Lengkap</label>
+                    <input type="text" name="name" class="form-input" value="{{ old('name') }}" required autofocus placeholder="Masukkan nama Anda">
                 </div>
-                <div class="mb-6">
-                    <label class="form-label">Password</label>
+                <div class="mb-4">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-input" value="{{ old('email') }}" required placeholder="nama@email.com">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Password (Minimal 8 karakter)</label>
                     <input type="password" name="password" class="form-input" required placeholder="••••••••">
                 </div>
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Masuk</button>
+                <div class="mb-6">
+                    <label class="form-label">Konfirmasi Password</label>
+                    <input type="password" name="password_confirmation" class="form-input" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Daftar Sekarang</button>
             </form>
 
             <div class="mt-6 text-center text-sm text-gray-600 border-t pt-5">
-                Belum punya akun? <a href="/register" class="text-amber font-semibold hover:underline">Daftar sekarang</a>
+                Sudah punya akun? <a href="{{ route('login') }}" class="text-amber font-semibold hover:underline">Masuk di sini</a>
             </div>
         </div>
 
