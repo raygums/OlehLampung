@@ -207,10 +207,13 @@ class CheckoutController extends Controller
 
     public function midtransCallback(Request $request)
     {
+        \Log::info('Midtrans Webhook Received:', $request->all());
+
         $serverKey = config('services.midtrans.serverKey');
         $hashed = hash('sha512', $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
 
         if ($hashed !== $request->signature_key) {
+            \Log::warning('Midtrans Webhook Invalid Signature', ['expected' => $hashed, 'received' => $request->signature_key]);
             return response()->json(['message' => 'Invalid signature'], 403);
         }
 
