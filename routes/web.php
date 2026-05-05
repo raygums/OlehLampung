@@ -16,8 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function() {
     return view('home', [
-        'categories' => \App\Models\Category::orderBy('sort_order')->take(3)->get(),
-        'featuredProducts' => \App\Models\Product::active()->featured()->with('category')->take(4)->get(),
+        'categories' => \App\Models\Category::whereIn('slug', ['kopi', 'makanan'])->orderBy('sort_order')->get(),
+        'featuredProducts' => \App\Models\Product::active()->featured()
+            ->whereHas('category', fn($q) => $q->whereIn('slug', ['kopi', 'makanan']))
+            ->with('category')->take(4)->get(),
     ]);
 })->name('home');
 

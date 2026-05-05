@@ -46,7 +46,7 @@
         <h2 class="section-title">Kategori Unggulan</h2>
         <p class="section-subtitle mb-12">Jelajahi koleksi terbaik dari Lampung</p>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             @foreach($categories as $category)
                 <a href="{{ route('products.category', $category->slug) }}" class="category-card group">
                     <img src="{{ $category->image ?: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop' }}" alt="{{ $category->name }}">
