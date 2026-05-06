@@ -126,6 +126,11 @@
 @push('scripts')
 <script>
 function addToCart(productId) {
+    @guest
+        window.location.href = '{{ route("login") }}';
+        return;
+    @endguest
+
     fetch('{{ route("cart.add") }}', {
         method: 'POST',
         headers: {
@@ -135,9 +140,12 @@ function addToCart(productId) {
         },
         body: JSON.stringify({ product_id: productId, quantity: 1 })
     })
-    .then(r => r.json())
+    .then(r => {
+        if (r.redirected || r.status === 401) { window.location.href = '{{ route("login") }}'; return; }
+        return r.json();
+    })
     .then(data => {
-        if (data.success) {
+        if (data && data.success) {
             const badge = document.getElementById('cart-badge');
             badge.textContent = data.cartCount;
             badge.style.display = 'flex';

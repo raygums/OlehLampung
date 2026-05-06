@@ -119,8 +119,17 @@
 @push('scripts')
 <script>
 function addToCart(productId) {
+    @guest
+        window.location.href = '{{ route("login") }}';
+        return;
+    @endguest
+
     fetch('{{ route("cart.add") }}', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content, 'Accept': 'application/json' }, body: JSON.stringify({ product_id: productId, quantity: 1 }) })
-    .then(r => r.json()).then(data => { if(data.success){ document.getElementById('cart-badge').textContent=data.cartCount; document.getElementById('cart-badge').style.display='flex'; showToast(data.message,'success'); }});
+    .then(r => {
+        if (r.redirected || r.status === 401) { window.location.href = '{{ route("login") }}'; return; }
+        return r.json();
+    })
+    .then(data => { if(data && data.success){ document.getElementById('cart-badge').textContent=data.cartCount; document.getElementById('cart-badge').style.display='flex'; showToast(data.message,'success'); }});
 }
 function showToast(m,t){ const e=document.querySelector('.toast'); if(e)e.remove(); const d=document.createElement('div'); d.className='toast toast-'+t; d.textContent=m; document.body.appendChild(d); requestAnimationFrame(()=>d.classList.add('show')); setTimeout(()=>{d.classList.remove('show');setTimeout(()=>d.remove(),400)},3000); }
 </script>

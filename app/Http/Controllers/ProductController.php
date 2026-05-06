@@ -10,7 +10,8 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::active()->with('category');
+        $query = Product::active()->with('category')
+            ->whereHas('category', fn($q) => $q->whereIn('slug', ['kopi', 'makanan']));
 
         // Category filter
         if ($request->filled('categories')) {
@@ -49,7 +50,8 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $q = $request->get('q', '');
-        $query = Product::active()->with('category');
+        $query = Product::active()->with('category')
+            ->whereHas('category', fn($q) => $q->whereIn('slug', ['kopi', 'makanan']));
 
         if ($q) {
             $query->where(function ($qb) use ($q) {

@@ -121,12 +121,31 @@
 function changeQty(d){const i=document.getElementById('qty-input');let v=parseInt(i.value)+d;if(v<1)v=1;if(v>parseInt(i.max))v=parseInt(i.max);i.value=v;}
 document.getElementById('add-to-cart-form').addEventListener('submit',function(e){
     e.preventDefault();
+    @guest
+        window.location.href = '{{ route("login") }}';
+        return;
+    @endguest
     const fd=new FormData(this);
     fetch('{{ route("cart.add") }}',{method:'POST',headers:{'X-CSRF-TOKEN':'{{ csrf_token() }}','Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({product_id:fd.get('product_id'),quantity:parseInt(fd.get('quantity'))})})
-    .then(r=>r.json()).then(data=>{if(data.success){document.getElementById('cart-badge').textContent=data.cartCount;document.getElementById('cart-badge').style.display='flex';showToast(data.message,'success');}});
+    .then(r=>{
+        if (r.redirected || r.status === 401) { window.location.href = '{{ route("login") }}'; return; }
+        return r.json();
+    })
+    .then(data=>{if(data && data.success){document.getElementById('cart-badge').textContent=data.cartCount;document.getElementById('cart-badge').style.display='flex';showToast(data.message,'success');}});
 });
 document.querySelectorAll('.tab-btn').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.remove('active','text-amber','border-amber');b.classList.add('text-gray-400','border-transparent');});this.classList.add('active','text-amber','border-amber');this.classList.remove('text-gray-400','border-transparent');document.querySelectorAll('.tab-content').forEach(c=>c.classList.add('hidden'));document.getElementById('tab-'+this.dataset.tab).classList.remove('hidden');});});
-function addToCart(id){fetch('{{ route("cart.add") }}',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-TOKEN':'{{ csrf_token() }}','Accept':'application/json'},body:JSON.stringify({product_id:id,quantity:1})}).then(r=>r.json()).then(d=>{if(d.success){document.getElementById('cart-badge').textContent=d.cartCount;document.getElementById('cart-badge').style.display='flex';showToast(d.message,'success');}});}
+function addToCart(id){
+    @guest
+        window.location.href = '{{ route("login") }}';
+        return;
+    @endguest
+    fetch('{{ route("cart.add") }}',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-TOKEN':'{{ csrf_token() }}','Accept':'application/json'},body:JSON.stringify({product_id:id,quantity:1})})
+    .then(r=>{
+        if (r.redirected || r.status === 401) { window.location.href = '{{ route("login") }}'; return; }
+        return r.json();
+    })
+    .then(d=>{if(d && d.success){document.getElementById('cart-badge').textContent=d.cartCount;document.getElementById('cart-badge').style.display='flex';showToast(d.message,'success');}});
+}
 function showToast(m,t){const e=document.querySelector('.toast');if(e)e.remove();const d=document.createElement('div');d.className='toast toast-'+t;d.textContent=m;document.body.appendChild(d);requestAnimationFrame(()=>d.classList.add('show'));setTimeout(()=>{d.classList.remove('show');setTimeout(()=>d.remove(),400)},3000);}
 </script>
 @endpush

@@ -32,7 +32,7 @@
                     <a href="{{ route('home') }}" class="text-sm font-medium text-gray-300 hover:text-amber transition-colors {{ request()->routeIs('home') ? 'text-amber' : '' }}">Beranda</a>
                     
                     @php 
-                        $navCategories = \App\Models\Category::whereNotIn('slug', ['kerajinan', 'minuman', 'souvenir'])
+                        $navCategories = \App\Models\Category::whereIn('slug', ['kopi', 'makanan'])
                             ->orderBy('sort_order')
                             ->get(); 
                     @endphp
@@ -50,9 +50,11 @@
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </a>
 
-                    <a href="{{ route('cart.index') }}" class="relative text-gray-300 hover:text-amber transition-colors p-2">
+                    <a href="{{ auth()->check() ? route('cart.index') : route('login') }}" class="relative text-gray-300 hover:text-amber transition-colors p-2" title="{{ auth()->check() ? 'Keranjang' : 'Masuk untuk belanja' }}">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
-                        <span class="absolute top-0 right-0 bg-amber text-navy text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center cart-count" id="cart-badge" style="display: none;">0</span>
+                        @auth
+                            <span class="absolute top-0 right-0 bg-amber text-navy text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center cart-count" id="cart-badge" style="display: none;">0</span>
+                        @endauth
                     </a>
 
                     @auth
