@@ -24,14 +24,14 @@ class ProductController extends Controller
         }
 
         $products = $query->latest()->paginate(15)->withQueryString();
-        $categories = Category::orderBy('sort_order')->get();
+        $categories = Category::whereIn('slug', ['kopi', 'makanan'])->orderBy('sort_order')->get();
 
         return view('admin.products.index', compact('products', 'categories'));
     }
 
     public function create()
     {
-        $categories = Category::orderBy('sort_order')->get();
+        $categories = Category::whereIn('slug', ['kopi', 'makanan'])->orderBy('sort_order')->get();
         return view('admin.products.create', compact('categories'));
     }
 
@@ -50,7 +50,7 @@ class ProductController extends Controller
         ]);
 
         $data = $request->except('images');
-        $data['slug'] = Str::slug($request->name);
+        $data['slug'] = $this->uniqueSlug($request->name);
         $data['is_featured'] = $request->boolean('is_featured');
         $data['is_sale'] = $request->boolean('is_sale');
         $data['is_active'] = $request->boolean('is_active', true);
@@ -72,7 +72,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $categories = Category::orderBy('sort_order')->get();
+        $categories = Category::whereIn('slug', ['kopi', 'makanan'])->orderBy('sort_order')->get();
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
@@ -91,7 +91,7 @@ class ProductController extends Controller
         ]);
 
         $data = $request->except('images');
-        $data['slug'] = Str::slug($request->name);
+        $data['slug'] = $this->uniqueSlug($request->name, $product->id);
         $data['is_featured'] = $request->boolean('is_featured');
         $data['is_sale'] = $request->boolean('is_sale');
         $data['is_active'] = $request->boolean('is_active', true);
@@ -114,5 +114,25 @@ class ProductController extends Controller
     {
         $product->delete();
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil dihapus!');
+    }
+
+    /**
+     * Generate a unique slug, appending -2, -3, etc. if needed.
+     */
+    private function uniqueSlug(string $name, ?int $ignoreId = null): string
+    {
+        $slug = Str::slug($name);
+        $original = $slug;
+        $counter = 2;
+
+        while (
+            Product::where('slug', $slug)
+                ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
+                ->exists()
+        ) {
+            $slug = $original . '-' . $counter++;
+        }
+
+        return $slug;
     }
 }

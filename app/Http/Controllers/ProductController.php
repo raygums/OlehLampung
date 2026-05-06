@@ -10,7 +10,8 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::active()->with('category');
+        $query = Product::active()->with('category')
+            ->whereHas('category', fn($q) => $q->whereIn('slug', ['kopi', 'makanan']));
 
         // Category filter
         if ($request->filled('categories')) {
@@ -41,7 +42,7 @@ class ProductController extends Controller
         };
 
         $products = $query->paginate(9)->withQueryString();
-        $categories = Category::withCount('products')->orderBy('sort_order')->get();
+        $categories = Category::withCount('products')->whereIn('slug', ['kopi', 'makanan'])->orderBy('sort_order')->get();
 
         return view('products.index', compact('products', 'categories'));
     }
@@ -49,7 +50,8 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $q = $request->get('q', '');
-        $query = Product::active()->with('category');
+        $query = Product::active()->with('category')
+            ->whereHas('category', fn($q) => $q->whereIn('slug', ['kopi', 'makanan']));
 
         if ($q) {
             $query->where(function ($qb) use ($q) {
@@ -90,7 +92,7 @@ class ProductController extends Controller
         }
 
         $products = $query->paginate(9)->withQueryString();
-        $categories = Category::withCount('products')->orderBy('sort_order')->get();
+        $categories = Category::withCount('products')->whereIn('slug', ['kopi', 'makanan'])->orderBy('sort_order')->get();
 
         return view('products.index', [
             'products' => $products,
@@ -118,7 +120,7 @@ class ProductController extends Controller
             ->with('category')
             ->paginate(9);
 
-        $categories = Category::withCount('products')->orderBy('sort_order')->get();
+        $categories = Category::withCount('products')->whereIn('slug', ['kopi', 'makanan'])->orderBy('sort_order')->get();
 
         return view('products.index', [
             'products' => $products,

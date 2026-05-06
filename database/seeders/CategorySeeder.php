@@ -24,27 +24,7 @@ class CategorySeeder extends Seeder
                 'image' => '/images/categories/makanan.jpg',
                 'sort_order' => 2,
             ],
-            [
-                'name' => 'Kerajinan',
-                'slug' => 'kerajinan',
-                'description' => 'Kain tapis, batik, dan kerajinan tangan khas suku Lampung.',
-                'image' => '/images/categories/kerajinan.jpg',
-                'sort_order' => 3,
-            ],
-            [
-                'name' => 'Minuman',
-                'slug' => 'minuman',
-                'description' => 'Teh herbal, sirup, dan minuman tradisional Lampung.',
-                'image' => '/images/categories/minuman.jpg',
-                'sort_order' => 4,
-            ],
-            [
-                'name' => 'Souvenir',
-                'slug' => 'souvenir',
-                'description' => 'Pernak-pernik dan cinderamata khas Lampung untuk kenang-kenangan.',
-                'image' => '/images/categories/souvenir.jpg',
-                'sort_order' => 5,
-            ],
+
         ];
 
         foreach ($categories as $category) {

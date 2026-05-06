@@ -2,7 +2,7 @@
 @section('page-title', 'Manajemen Pesanan')
 @section('content')
 <div class="flex items-center justify-between mb-6">
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-4 flex-wrap">
         <a href="{{ route('admin.orders.index') }}" class="btn btn-sm {{ !request('status')?'btn-primary':'btn-outline' }}">Semua</a>
         @foreach(['pending'=>'Menunggu','confirmed'=>'Dikonfirmasi','processing'=>'Diproses','shipped'=>'Dikirim','delivered'=>'Selesai','cancelled'=>'Batal'] as $k=>$v)
             <a href="{{ route('admin.orders.index',['status'=>$k]) }}" class="btn btn-sm {{ request('status')==$k?'btn-primary':'btn-outline' }}">{{ $v }}</a>

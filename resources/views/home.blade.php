@@ -5,17 +5,17 @@
 @section('content')
 {{-- Hero Section --}}
 <section class="bg-cream">
-    <div class="container-main py-20 md:py-28">
+    <div class="container-main pt-20 pb-32 md:pt-28 md:pb-40">
         <div class="grid md:grid-cols-2 gap-10 items-center">
             <div class="animate-fade-in-up">
                 <h1 class="font-heading text-4xl md:text-5xl font-extrabold text-navy leading-tight mb-4">
                     Oleh-oleh Autentik Lampung,<br>
                     <span class="text-amber">Kirim ke Mana Saja.</span>
                 </h1>
-                <p class="text-gray-500 text-lg mb-8 max-w-md">
+                <p class="text-gray-500 text-lg mb-10 max-w-md">
                     Pilihan terbaik keripik pisang, kopi robusta, dan kerajinan Tapis untuk mahasiswa perantau dan pecinta kuliner.
                 </p>
-                <a href="{{ route('products.index') }}" class="btn btn-primary btn-lg">
+                <a href="{{ route('products.index') }}" class="btn btn-primary btn-lg mb-6">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
                     Belanja Sekarang
                 </a>
@@ -41,12 +41,12 @@
 </section>
 
 {{-- Kategori Unggulan --}}
-<section class="py-20">
+<section class="py-24">
     <div class="container-main">
         <h2 class="section-title">Kategori Unggulan</h2>
         <p class="section-subtitle mb-12">Jelajahi koleksi terbaik dari Lampung</p>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             @foreach($categories as $category)
                 <a href="{{ route('products.category', $category->slug) }}" class="category-card group">
                     <img src="{{ $category->image ?: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop' }}" alt="{{ $category->name }}">
@@ -126,6 +126,11 @@
 @push('scripts')
 <script>
 function addToCart(productId) {
+    @guest
+        window.location.href = '{{ route("login") }}';
+        return;
+    @endguest
+
     fetch('{{ route("cart.add") }}', {
         method: 'POST',
         headers: {
@@ -135,9 +140,12 @@ function addToCart(productId) {
         },
         body: JSON.stringify({ product_id: productId, quantity: 1 })
     })
-    .then(r => r.json())
+    .then(r => {
+        if (r.redirected || r.status === 401) { window.location.href = '{{ route("login") }}'; return; }
+        return r.json();
+    })
     .then(data => {
-        if (data.success) {
+        if (data && data.success) {
             const badge = document.getElementById('cart-badge');
             badge.textContent = data.cartCount;
             badge.style.display = 'flex';

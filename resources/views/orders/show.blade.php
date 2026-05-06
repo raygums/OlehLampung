@@ -1,51 +1,123 @@
 @extends('layouts.app')
 @section('title', 'Pesanan '.$order->order_number.' — OlehLampung')
 @section('content')
-<div class="container-main py-8 max-w-2xl mx-auto">
-    <a href="{{ route('orders.index') }}" class="text-amber text-sm hover:underline mb-4 inline-block">← Kembali ke daftar pesanan</a>
+<div class="order-detail-page">
+    <div class="container-main">
+        {{-- Back link --}}
+        <a href="{{ route('orders.index') }}" class="order-detail-back">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            Kembali ke daftar pesanan
+        </a>
 
-    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-        <div class="p-6 border-b bg-gray-50">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="font-heading text-xl font-bold text-navy">Pesanan {{ $order->order_number }}</h1>
-                    <p class="text-sm text-gray-500 mt-1">{{ $order->created_at->translatedFormat('l, d F Y · H:i') }}</p>
+        <div class="order-detail-card">
+            {{-- Header --}}
+            <div class="order-detail-header">
+                <div class="order-detail-header-left">
+                    <div class="order-detail-number-row">
+                        <h1 class="order-detail-number">{{ $order->order_number }}</h1>
+                        <span class="order-status-badge lg {{ $order->status_color }}">
+                            {{ $order->status_label }}
+                        </span>
+                    </div>
+                    <p class="order-detail-date">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        {{ $order->created_at->translatedFormat('l, d F Y · H:i') }}
+                    </p>
                 </div>
-                <span class="badge text-sm px-3 py-1 {{ match($order->status_color) { 'yellow'=>'bg-yellow-100 text-yellow-700', 'green'=>'bg-green-100 text-green-700', 'blue'=>'bg-blue-100 text-blue-700', 'red'=>'bg-red-100 text-red-700', default=>'bg-gray-100 text-gray-700' } }}">{{ $order->status_label }}</span>
             </div>
-        </div>
 
-        <div class="p-6">
-            {{-- Details --}}
-            <table class="w-full text-sm mb-6">
-                <tr class="border-b"><td class="py-2.5 text-gray-500 w-1/3">Penerima</td><td class="py-2.5 font-medium">{{ $order->full_name }}</td></tr>
-                <tr class="border-b"><td class="py-2.5 text-gray-500">WhatsApp</td><td class="py-2.5 font-medium">{{ $order->whatsapp }}</td></tr>
-                <tr class="border-b"><td class="py-2.5 text-gray-500">Alamat</td><td class="py-2.5 font-medium">{{ $order->address }}, {{ $order->city }}, {{ $order->province }} {{ $order->postal_code }}</td></tr>
-                <tr class="border-b"><td class="py-2.5 text-gray-500">Kurir</td><td class="py-2.5 font-medium">{{ strtoupper(str_replace('_',' ',$order->shipping_method)) }}</td></tr>
-                <tr><td class="py-2.5 text-gray-500">Pembayaran</td><td class="py-2.5 font-medium">{{ ucwords(str_replace('_',' ',$order->payment_method)) }}</td></tr>
-            </table>
+            {{-- Info Grid --}}
+            <div class="order-detail-info">
+                <div class="order-info-item">
+                    <div class="order-info-icon">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    </div>
+                    <div>
+                        <span class="order-info-label">Penerima</span>
+                        <span class="order-info-value">{{ $order->full_name }}</span>
+                    </div>
+                </div>
+                <div class="order-info-item">
+                    <div class="order-info-icon">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                    </div>
+                    <div>
+                        <span class="order-info-label">WhatsApp</span>
+                        <span class="order-info-value">{{ $order->whatsapp }}</span>
+                    </div>
+                </div>
+                <div class="order-info-item full-width">
+                    <div class="order-info-icon">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    </div>
+                    <div>
+                        <span class="order-info-label">Alamat Pengiriman</span>
+                        <span class="order-info-value">{{ $order->address }}, {{ $order->city }}, {{ $order->province }} {{ $order->postal_code }}</span>
+                    </div>
+                </div>
+                <div class="order-info-item">
+                    <div class="order-info-icon">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
+                    </div>
+                    <div>
+                        <span class="order-info-label">Kurir</span>
+                        <span class="order-info-value">{{ strtoupper(str_replace('_',' ',$order->shipping_method)) }}</span>
+                    </div>
+                </div>
+                <div class="order-info-item">
+                    <div class="order-info-icon">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                    </div>
+                    <div>
+                        <span class="order-info-label">Pembayaran</span>
+                        <span class="order-info-value">{{ ucwords(str_replace('_',' ',$order->payment_method)) }}</span>
+                    </div>
+                </div>
+            </div>
 
             {{-- Items --}}
-            <h3 class="font-semibold text-navy text-sm mb-3">Item Pesanan</h3>
-            <div class="space-y-2 mb-6">
-                @foreach($order->items as $item)
-                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                        @if($item->product)
-                            <img src="{{ $item->product->primary_image }}" class="w-12 h-12 rounded object-cover">
-                        @endif
-                        <div class="flex-1">
-                            <p class="text-sm font-medium">{{ $item->product_name }} × {{ $item->quantity }}</p>
+            <div class="order-detail-section">
+                <h3 class="order-detail-section-title">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    Item Pesanan
+                    <span class="order-detail-section-count">{{ $order->items->count() }} item</span>
+                </h3>
+                <div class="order-items-list">
+                    @foreach($order->items as $item)
+                        <div class="order-item-row">
+                            <div class="order-item-image">
+                                @if($item->product)
+                                    <img src="{{ $item->product->primary_image }}" alt="{{ $item->product_name }}">
+                                @else
+                                    <div class="order-item-image-placeholder">
+                                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="order-item-info">
+                                <p class="order-item-name">{{ $item->product_name }}</p>
+                                <p class="order-item-qty">Qty: {{ $item->quantity }}</p>
+                            </div>
+                            <span class="order-item-price">{{ $item->formatted_subtotal }}</span>
                         </div>
-                        <span class="text-sm font-semibold">{{ $item->formatted_subtotal }}</span>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
 
             {{-- Totals --}}
-            <div class="border-t pt-4 space-y-2 text-sm">
-                <div class="flex justify-between"><span class="text-gray-500">Subtotal</span><span>{{ $order->formatted_subtotal }}</span></div>
-                <div class="flex justify-between"><span class="text-gray-500">Ongkos Kirim</span><span>Rp {{ number_format($order->shipping_cost,0,',','.') }}</span></div>
-                <div class="flex justify-between font-bold text-lg border-t pt-3 mt-2"><span>Total</span><span class="text-amber">{{ $order->formatted_total }}</span></div>
+            <div class="order-detail-totals">
+                <div class="order-total-row">
+                    <span>Subtotal</span>
+                    <span>{{ $order->formatted_subtotal }}</span>
+                </div>
+                <div class="order-total-row">
+                    <span>Ongkos Kirim</span>
+                    <span>Rp {{ number_format($order->shipping_cost,0,',','.') }}</span>
+                </div>
+                <div class="order-total-row total">
+                    <span>Total Pembayaran</span>
+                    <span>{{ $order->formatted_total }}</span>
+                </div>
             </div>
         </div>
     </div>
